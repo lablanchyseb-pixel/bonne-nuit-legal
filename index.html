@@ -15,20 +15,76 @@
     --border: #322b5c;
   }
   * { box-sizing: border-box; }
+  html { background: var(--bg); }
   body {
     margin: 0;
     background: var(--bg);
     color: var(--text);
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     line-height: 1.6;
+    position: relative;
+    overflow-x: hidden;
   }
+
+  /* Starfield */
+  #stars {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .star {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: #fff;
+    opacity: 0.15;
+    animation: twinkle linear infinite;
+  }
+  @keyframes twinkle {
+    0%, 100% { opacity: 0.12; transform: scale(1); }
+    50% { opacity: 0.8; transform: scale(1.4); }
+  }
+
+  /* Moon glow behind header */
+  .moon-glow {
+    position: absolute;
+    top: -140px;
+    left: 50%;
+    width: 420px;
+    height: 420px;
+    margin-left: -210px;
+    background: radial-gradient(circle, rgba(232,201,155,0.18) 0%, rgba(232,201,155,0) 70%);
+    border-radius: 50%;
+    z-index: 0;
+    animation: glow-pulse 6s ease-in-out infinite;
+  }
+  @keyframes glow-pulse {
+    0%, 100% { opacity: 0.7; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.08); }
+  }
+
   .wrap {
     max-width: 720px;
     margin: 0 auto;
     padding: 48px 24px 96px;
+    position: relative;
+    z-index: 1;
   }
   header {
     margin-bottom: 40px;
+  }
+  .moon {
+    font-size: 30px;
+    display: inline-block;
+    margin-bottom: 10px;
+    animation: drift 5s ease-in-out infinite;
+    filter: drop-shadow(0 0 10px rgba(232,201,155,0.5));
+  }
+  @keyframes drift {
+    0%, 100% { transform: translateY(0) rotate(-4deg); }
+    50% { transform: translateY(-6px) rotate(4deg); }
   }
   .eyebrow {
     color: var(--gold);
@@ -65,6 +121,11 @@
     border-radius: 14px;
     padding: 20px 22px;
     margin: 0 0 16px;
+    transition: border-color 0.3s ease, transform 0.3s ease;
+  }
+  .card:hover {
+    border-color: rgba(232,201,155,0.4);
+    transform: translateY(-2px);
   }
   .card p:last-child { margin-bottom: 0; }
   a { color: var(--gold); }
@@ -76,61 +137,123 @@
     color: var(--text-dim);
     font-size: 14px;
   }
+
+  /* Scroll reveal */
+  .reveal {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .reveal.in-view {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  header.reveal {
+    transition-delay: 0.05s;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .star, .moon-glow, .moon { animation: none !important; }
+    .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+    .card:hover { transform: none; }
+  }
 </style>
 </head>
 <body>
+<div id="stars"></div>
+<div class="moon-glow"></div>
+
 <div class="wrap">
-  <header>
+  <header class="reveal">
+    <span class="moon">🌙</span>
     <p class="eyebrow">Bonne nuit</p>
     <h1>Politique de confidentialité</h1>
     <p class="meta">Dernière mise à jour : 10 septembre 2026</p>
   </header>
 
-  <p>Bonne nuit est une application familiale de sons pour l'endormissement, éditée par Sébastien Lablanchy. Cette page explique quelles données l'application traite, pourquoi, et comment les gérer. Nous avons conçu l'application pour collecter le moins de données possible : il n'y a pas de compte, pas de connexion, et aucune information sur votre enfant n'est jamais envoyée à qui que ce soit.</p>
+  <p class="reveal">Bonne nuit est une application familiale de sons pour l'endormissement, éditée par Sébastien Lablanchy. Cette page explique quelles données l'application traite, pourquoi, et comment les gérer. Nous avons conçu l'application pour collecter le moins de données possible : il n'y a pas de compte, pas de connexion, et aucune information sur votre enfant n'est jamais envoyée à qui que ce soit.</p>
 
-  <h2>Ce que nous ne collectons pas</h2>
-  <div class="card">
+  <h2 class="reveal">Ce que nous ne collectons pas</h2>
+  <div class="card reveal">
     <p>Bonne nuit ne demande pas de créer de compte, ne collecte pas votre nom, votre adresse e‑mail ou toute autre information d'identification. Le prénom que vous renseignez pour votre enfant reste stocké uniquement sur votre appareil : il n'est jamais transmis à un serveur, ni à nous, ni à un service tiers.</p>
   </div>
 
-  <h2>Microphone et enregistrements</h2>
-  <div class="card">
+  <h2 class="reveal">Microphone et enregistrements</h2>
+  <div class="card reveal">
     <p>Si vous utilisez la fonction d'enregistrement de berceuse, l'application demande l'accès au microphone. L'enregistrement audio produit reste stocké localement sur votre appareil ; il n'est jamais envoyé sur un serveur ni partagé avec nous ou un tiers. Vous pouvez le supprimer à tout moment depuis l'application.</p>
   </div>
 
-  <h2>Catalogue des sons</h2>
-  <div class="card">
+  <h2 class="reveal">Catalogue des sons</h2>
+  <div class="card reveal">
     <p>La liste des sons proposés est synchronisée depuis notre serveur de contenu afin de pouvoir ajouter de nouveaux sons sans mise à jour de l'application. Cette synchronisation ne transmet aucune donnée personnelle : elle sert uniquement à récupérer le catalogue.</p>
   </div>
 
-  <h2>Publicité</h2>
-  <div class="card">
+  <h2 class="reveal">Publicité</h2>
+  <div class="card reveal">
     <p>L'application affiche des publicités via Google AdMob afin de rester gratuite. Sur iOS, l'autorisation de suivi (App Tracking Transparency) vous est demandée avant tout affichage de publicité personnalisée ; vous pouvez la refuser, l'application fonctionnera normalement avec des publicités non personnalisées. Un formulaire de consentement (RGPD) est également accessible à tout moment depuis les réglages de l'application.</p>
     <p>Google AdMob peut traiter un identifiant publicitaire de votre appareil selon sa propre politique de confidentialité, disponible sur <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">policies.google.com/privacy</a>.</p>
   </div>
 
-  <h2>Statistiques et rapports de plantage</h2>
-  <div class="card">
+  <h2 class="reveal">Statistiques et rapports de plantage</h2>
+  <div class="card reveal">
     <p>Nous utilisons PostHog pour comprendre, de façon agrégée et anonyme, comment l'application est utilisée (par exemple : quels écrans sont ouverts, quelles fonctions sont utilisées). Aucun profil individuel n'est créé, aucune géolocalisation précise n'est utilisée, et aucune information permettant de vous identifier n'est associée à ces statistiques.</p>
     <p>Nous utilisons Sentry pour être alertés en cas de plantage ou d'erreur technique, afin de corriger les bugs rapidement. Ces rapports ne contiennent ni donnée personnelle, ni capture d'écran, ni contenu de l'interface au moment de l'erreur.</p>
   </div>
 
-  <h2>Confidentialité des enfants</h2>
-  <div class="card">
+  <h2 class="reveal">Confidentialité des enfants</h2>
+  <div class="card reveal">
     <p>Bonne nuit est destinée à être utilisée par des parents avec leurs enfants, mais c'est l'adulte qui configure et utilise l'application. Aucune donnée personnelle concernant l'enfant n'est collectée : le prénom saisi reste local à l'appareil, comme indiqué plus haut.</p>
   </div>
 
-  <h2>Vos droits</h2>
-  <div class="card">
+  <h2 class="reveal">Vos droits</h2>
+  <div class="card reveal">
     <p>Comme l'application ne conserve aucune donnée personnelle sur nos serveurs, il n'y a rien à demander de « supprimer » de notre côté : effacer les données de l'application (ou la désinstaller) suffit à effacer tout ce qui est stocké localement, y compris le prénom renseigné et les enregistrements. Pour toute question sur les données traitées par Google AdMob, PostHog ou Sentry, vous pouvez nous contacter (coordonnées ci-dessous).</p>
   </div>
 
-  <h2>Modifications de cette politique</h2>
-  <p>Cette politique peut évoluer si l'application change (par exemple lors de l'ajout d'un abonnement premium). La date de dernière mise à jour en haut de cette page reflète toujours la version en vigueur.</p>
+  <h2 class="reveal">Modifications de cette politique</h2>
+  <p class="reveal">Cette politique peut évoluer si l'application change (par exemple lors de l'ajout d'un abonnement premium). La date de dernière mise à jour en haut de cette page reflète toujours la version en vigueur.</p>
 
-  <div class="contact">
-    <p>Une question sur vos données ? Écrivez-nous à <a href="mailto:s.lablanchy@overscan.fr">s.lablanchy@overscan.fr</a>.</p>
+  <div class="contact reveal">
+    <p>Une question sur vos données ? Écrivez-nous à <a href="mailto:lablanchyseb@gmail.com">lablanchyseb@gmail.com</a>.</p>
   </div>
 </div>
+
+<script>
+  // Starfield
+  (function () {
+    var container = document.getElementById('stars');
+    var count = window.innerWidth < 600 ? 40 : 70;
+    for (var i = 0; i < count; i++) {
+      var s = document.createElement('div');
+      s.className = 'star';
+      s.style.left = Math.random() * 100 + 'vw';
+      s.style.top = Math.random() * 100 + 'vh';
+      var size = (Math.random() * 2 + 1.5).toFixed(1);
+      s.style.width = size + 'px';
+      s.style.height = size + 'px';
+      s.style.animationDuration = (2 + Math.random() * 4).toFixed(1) + 's';
+      s.style.animationDelay = (Math.random() * 4).toFixed(1) + 's';
+      container.appendChild(s);
+    }
+  })();
+
+  // Scroll reveal
+  (function () {
+    var items = document.querySelectorAll('.reveal');
+    if (!('IntersectionObserver' in window)) {
+      items.forEach(function (el) { el.classList.add('in-view'); });
+      return;
+    }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    items.forEach(function (el) { io.observe(el); });
+  })();
+</script>
 </body>
 </html>
