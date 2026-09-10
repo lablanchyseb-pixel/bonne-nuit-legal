@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Conditions d'utilisation — Bonne nuit</title>
+<style>
+  :root {
+    color-scheme: dark;
+    --bg: #14102b;
+    --bg-soft: #1c1740;
+    --text: #f4f1ff;
+    --text-dim: #b9b3d9;
+    --gold: #e8c99b;
+    --border: #322b5c;
+  }
+  * { box-sizing: border-box; }
+  html { background: var(--bg); }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* Starfield */
+  #stars {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .star {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: #fff;
+    opacity: 0.15;
+    animation: twinkle linear infinite;
+  }
+  @keyframes twinkle {
+    0%, 100% { opacity: 0.12; transform: scale(1); }
+    50% { opacity: 0.8; transform: scale(1.4); }
+  }
+
+  /* Soft glow behind header */
+  .header-glow {
+    position: absolute;
+    top: -140px;
+    left: 50%;
+    width: 420px;
+    height: 420px;
+    margin-left: -210px;
+    background: radial-gradient(circle, rgba(232,201,155,0.18) 0%, rgba(232,201,155,0) 70%);
+    border-radius: 50%;
+    z-index: 0;
+    animation: glow-pulse 6s ease-in-out infinite;
+  }
+  @keyframes glow-pulse {
+    0%, 100% { opacity: 0.7; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.08); }
+  }
+
+  /* Language switcher */
+  .lang-switch {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    z-index: 10;
+    display: flex;
+    gap: 4px;
+    background: rgba(28, 23, 64, 0.85);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 4px;
+  }
+  .lang-switch button {
+    appearance: none;
+    border: none;
+    background: transparent;
+    color: var(--text-dim);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    padding: 6px 10px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background 0.25s ease, color 0.25s ease;
+  }
+  .lang-switch button:hover {
+    color: var(--text);
+  }
+  .lang-switch button.active {
+    background: var(--gold);
+    color: #2a1f0f;
+  }
+
+  .wrap {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 48px 24px 96px;
+    position: relative;
+    z-index: 1;
+  }
+  header {
+    margin-bottom: 40px;
+  }
+  .eyebrow {
+    color: var(--gold);
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 600;
+    margin: 0 0 8px;
+  }
+  h1 {
+    font-size: 28px;
+    margin: 0 0 8px;
+  }
+  .meta {
+    color: var(--text-dim);
+    font-size: 14px;
+    margin: 0;
+  }
+  h2 {
+    font-size: 19px;
+    margin: 40px 0 12px;
+    color: var(--gold);
+  }
+  p, li {
+    color: var(--text);
+    font-size: 15.5px;
+  }
+  p { margin: 0 0 14px; }
+  ul { margin: 0 0 14px; padding-left: 20px; }
+  li { margin-bottom: 8px; }
+  .card {
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px 22px;
+    margin: 0 0 16px;
+    transition: border-color 0.3s ease, transform 0.3s ease;
+  }
+  .card:hover {
+    border-color: rgba(232,201,155,0.4);
+    transform: translateY(-2px);
+  }
+  .card p:last-child { margin-bottom: 0; }
+  a { color: var(--gold); }
+  strong { color: var(--text); }
+  .contact {
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    color: var(--text-dim);
+    font-size: 14px;
+  }
+  .cross-link {
+    margin: 10px 0 0 !important;
+  }
+  .cross-link a {
+    color: var(--text-dim);
+    text-decoration: none;
+    border-bottom: 1px solid var(--border);
+    transition: color 0.2s ease, border-color 0.2s ease;
+  }
+  .cross-link a:hover {
+    color: var(--gold);
+    border-color: var(--gold);
+  }
+
+  /* Scroll reveal */
+  .reveal {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .reveal.in-view {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  [hidden] { display: none !important; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .star, .header-glow { animation: none !important; }
+    .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+    .card:hover { transform: none; }
+  }
+</style>
+</head>
+<body>
+<div id="stars"></div>
+<div class="header-glow"></div>
+
+<div class="lang-switch" role="group" aria-label="Choisir la langue / Choose language">
+  <button type="button" data-lang-btn="fr">FR</button>
+  <button type="button" data-lang-btn="en">EN</button>
+  <button type="button" data-lang-btn="es">ES</button>
+  <button type="button" data-lang-btn="de">DE</button>
+</div>
+
+<div class="wrap">
+
+  <!-- FRANÇAIS -->
+  <div class="lang-block" data-lang="fr">
+    <header class="reveal">
+      <p class="eyebrow">Bonne nuit</p>
+      <h1>Conditions d'utilisation</h1>
+      <p class="meta">Dernière mise à jour : 10 septembre 2026</p>
+    </header>
+
+    <p class="reveal">En utilisant l'application Bonne nuit, éditée par Sébastien Lablanchy (développeur indépendant), vous acceptez les présentes conditions d'utilisation. Si vous ne les acceptez pas, merci de ne pas utiliser l'application.</p>
+
+    <h2 class="reveal">Description du service</h2>
+    <div class="card reveal">
+      <p>Bonne nuit est une application proposant des sons apaisants (berceuses, sons de la nature) destinés à accompagner l'endormissement des enfants, ainsi qu'une fonction d'enregistrement de berceuses personnelles. L'application est gratuite et financée par de la publicité.</p>
+    </div>
+
+    <h2 class="reveal">Utilisation par des enfants et contrôle parental</h2>
+    <div class="card reveal">
+      <p>Bonne nuit est conçue pour être configurée et utilisée par un parent ou un adulte responsable au bénéfice d'un enfant. Elle ne s'adresse pas à des enfants utilisant l'application seuls et de façon autonome, notamment pour les réglages, le paramétrage du minuteur ou les options publicitaires.</p>
+    </div>
+
+    <h2 class="reveal">Ce n'est pas un dispositif médical</h2>
+    <div class="card reveal">
+      <p>Bonne nuit est un outil de confort destiné à faciliter l'endormissement. Elle ne constitue ni un dispositif médical, ni un avis médical, et ne doit pas remplacer le suivi d'un professionnel de santé en cas de troubles du sommeil.</p>
+    </div>
+
+    <h2 class="reveal">Propriété intellectuelle</h2>
+    <div class="card reveal">
+      <p>Les sons, textes, visuels et l'ensemble du contenu du catalogue de l'application sont la propriété de Bonne nuit ou de ses partenaires, et sont protégés par le droit de la propriété intellectuelle. Vous pouvez les utiliser dans le cadre normal de l'application, mais pas les extraire, les redistribuer ou les exploiter commercialement.</p>
+      <p>Les enregistrements audio que vous créez avec la fonction d'enregistrement de berceuse vous appartiennent : ils restent stockés sur votre appareil et ne sont ni collectés ni utilisés par nous.</p>
+    </div>
+
+    <h2 class="reveal">Utilisation acceptable</h2>
+    <div class="card reveal">
+      <p>Vous vous engagez à utiliser l'application conformément à sa destination, sans tenter de contourner ses mesures de sécurité, de la désassembler, ou d'en extraire le contenu à des fins autres que personnelles et familiales.</p>
+    </div>
+
+    <h2 class="reveal">Publicité</h2>
+    <div class="card reveal">
+      <p>L'application affiche des publicités fournies par Google AdMob afin de rester gratuite. Ces publicités sont soumises aux conditions et à la politique de confidentialité propres à Google. Plus de détails dans notre <a href="index.html">Politique de confidentialité</a>.</p>
+    </div>
+
+    <h2 class="reveal">Fonctionnalités premium</h2>
+    <div class="card reveal">
+      <p>L'application ne propose actuellement aucun achat ni abonnement : toutes les fonctionnalités sont accessibles gratuitement, avec publicité. Si un abonnement premium est proposé à l'avenir, ses conditions spécifiques (prix, durée, renouvellement, résiliation) seront communiquées avant tout achat, et les présentes conditions seront mises à jour en conséquence.</p>
+    </div>
+
+    <h2 class="reveal">Absence de garantie</h2>
+    <div class="card reveal">
+      <p>L'application est fournie « telle quelle », sans garantie d'aucune sorte, explicite ou implicite. Nous nous efforçons d'assurer son bon fonctionnement mais ne garantissons pas qu'elle sera exempte d'erreurs ou disponible sans interruption.</p>
+    </div>
+
+    <h2 class="reveal">Limitation de responsabilité</h2>
+    <div class="card reveal">
+      <p>Dans les limites autorisées par la loi, nous ne pourrons être tenus responsables des dommages indirects résultant de l'utilisation ou de l'impossibilité d'utiliser l'application.</p>
+    </div>
+
+    <h2 class="reveal">Modifications</h2>
+    <p class="reveal">Ces conditions peuvent être mises à jour pour refléter des évolutions de l'application (par exemple l'ajout d'un abonnement premium). La date de dernière mise à jour en haut de cette page reflète toujours la version en vigueur.</p>
+
+    <h2 class="reveal">Droit applicable</h2>
+    <div class="card reveal">
+      <p>Les présentes conditions sont régies par le droit français. En cas de litige, une solution amiable sera recherchée en priorité.</p>
+    </div>
+
+    <div class="contact reveal">
+      <p>Une question sur ces conditions ? Écrivez-nous à <a href="mailto:lablanchyseb@gmail.com">lablanchyseb@gmail.com</a>.</p>
+      <p class="cross-link"><a href="index.html">Consultez aussi notre Politique de confidentialité →</a></p>
+    </div>
+  </div>
+
+  <!-- ENGLISH -->
+  <div class="lang-block" data-lang="en" hidden>
+    <header class="reveal">
+      <p class="eyebrow">Bonne nuit</p>
+      <h1>Terms of Use</h1>
+      <p class="meta">Last updated: September 10, 2026</p>
+    </header>
+
+    <p class="reveal">By using the Bonne nuit app, published by Sébastien Lablanchy (independent developer), you agree to these terms of use. If you do not agree, please do not use the app.</p>
+
+    <h2 class="reveal">Description of the service</h2>
+    <div class="card reveal">
+      <p>Bonne nuit is an app offering soothing sounds (lullabies, nature sounds) to help children fall asleep, along with a feature to record your own lullabies. The app is free and funded by advertising.</p>
+    </div>
+
+    <h2 class="reveal">Use by children and parental supervision</h2>
+    <div class="card reveal">
+      <p>Bonne nuit is designed to be set up and used by a parent or responsible adult on behalf of a child. It is not intended for children to use on their own, particularly for settings, timer configuration, or advertising options.</p>
+    </div>
+
+    <h2 class="reveal">Not a medical device</h2>
+    <div class="card reveal">
+      <p>Bonne nuit is a comfort tool meant to help with falling asleep. It is not a medical device or medical advice, and should not replace care from a healthcare professional in case of sleep disorders.</p>
+    </div>
+
+    <h2 class="reveal">Intellectual property</h2>
+    <div class="card reveal">
+      <p>The sounds, text, visuals, and all content in the app's catalog are the property of Bonne nuit or its partners, and are protected by intellectual property law. You may use them within the normal use of the app, but not extract, redistribute, or commercially exploit them.</p>
+      <p>Audio recordings you create with the lullaby recording feature belong to you: they stay stored on your device and are never collected or used by us.</p>
+    </div>
+
+    <h2 class="reveal">Acceptable use</h2>
+    <div class="card reveal">
+      <p>You agree to use the app in accordance with its intended purpose, without attempting to bypass its security measures, reverse-engineer it, or extract its content for purposes other than personal and family use.</p>
+    </div>
+
+    <h2 class="reveal">Advertising</h2>
+    <div class="card reveal">
+      <p>The app displays ads provided by Google AdMob to stay free. These ads are subject to Google's own terms and privacy policy. See our <a href="index.html">Privacy Policy</a> for details.</p>
+    </div>
+
+    <h2 class="reveal">Premium features</h2>
+    <div class="card reveal">
+      <p>The app currently offers no purchases or subscriptions: all features are accessible for free, with ads. If a premium subscription is offered in the future, its specific terms (price, duration, renewal, cancellation) will be disclosed before any purchase, and these terms will be updated accordingly.</p>
+    </div>
+
+    <h2 class="reveal">No warranty</h2>
+    <div class="card reveal">
+      <p>The app is provided "as is", without warranty of any kind, express or implied. We strive to keep it working well but do not guarantee it will be error-free or available without interruption.</p>
+    </div>
+
+    <h2 class="reveal">Limitation of liability</h2>
+    <div class="card reveal">
+      <p>To the extent permitted by law, we cannot be held liable for indirect damages resulting from the use or inability to use the app.</p>
+    </div>
+
+    <h2 class="reveal">Changes</h2>
+    <p class="reveal">These terms may be updated to reflect changes to the app (for example, the addition of a premium subscription). The "last updated" date at the top of this page always reflects the version in effect.</p>
+
+    <h2 class="reveal">Governing law</h2>
+    <div class="card reveal">
+      <p>These terms are governed by French law. In the event of a dispute, an amicable solution will be sought first.</p>
+    </div>
+
+    <div class="contact reveal">
+      <p>Have a question about these terms? Email us at <a href="mailto:lablanchyseb@gmail.com">lablanchyseb@gmail.com</a>.</p>
+      <p class="cross-link"><a href="index.html">See also our Privacy Policy →</a></p>
+    </div>
+  </div>
+
+  <!-- ESPAÑOL -->
+  <div class="lang-block" data-lang="es" hidden>
+    <header class="reveal">
+      <p class="eyebrow">Bonne nuit</p>
+      <h1>Condiciones de uso</h1>
+      <p class="meta">Última actualización: 10 de septiembre de 2026</p>
+    </header>
+
+    <p class="reveal">Al utilizar la aplicación Bonne nuit, publicada por Sébastien Lablanchy (desarrollador independiente), aceptas estas condiciones de uso. Si no estás de acuerdo, por favor no utilices la aplicación.</p>
+
+    <h2 class="reveal">Descripción del servicio</h2>
+    <div class="card reveal">
+      <p>Bonne nuit es una aplicación que ofrece sonidos relajantes (nanas, sonidos de la naturaleza) para ayudar a los niños a conciliar el sueño, junto con una función para grabar tus propias nanas. La aplicación es gratuita y se financia mediante publicidad.</p>
+    </div>
+
+    <h2 class="reveal">Uso por parte de menores y supervisión parental</h2>
+    <div class="card reveal">
+      <p>Bonne nuit está diseñada para que un padre, madre o adulto responsable la configure y utilice en beneficio de un niño o niña. No está pensada para que los niños la usen solos, especialmente en lo referente a los ajustes, la configuración del temporizador o las opciones publicitarias.</p>
+    </div>
+
+    <h2 class="reveal">No es un dispositivo médico</h2>
+    <div class="card reveal">
+      <p>Bonne nuit es una herramienta de confort para ayudar a conciliar el sueño. No constituye un dispositivo médico ni un consejo médico, y no debe sustituir el seguimiento de un profesional de la salud en caso de trastornos del sueño.</p>
+    </div>
+
+    <h2 class="reveal">Propiedad intelectual</h2>
+    <div class="card reveal">
+      <p>Los sonidos, textos, elementos visuales y todo el contenido del catálogo de la aplicación son propiedad de Bonne nuit o de sus socios, y están protegidos por la legislación de propiedad intelectual. Puedes utilizarlos dentro del uso normal de la aplicación, pero no extraerlos, redistribuirlos ni explotarlos comercialmente.</p>
+      <p>Las grabaciones de audio que crees con la función de grabación de nanas te pertenecen: permanecen almacenadas en tu dispositivo y nunca son recopiladas ni utilizadas por nosotros.</p>
+    </div>
+
+    <h2 class="reveal">Uso aceptable</h2>
+    <div class="card reveal">
+      <p>Te comprometes a utilizar la aplicación conforme a su finalidad, sin intentar eludir sus medidas de seguridad, realizar ingeniería inversa, ni extraer su contenido con fines distintos del uso personal y familiar.</p>
+    </div>
+
+    <h2 class="reveal">Publicidad</h2>
+    <div class="card reveal">
+      <p>La aplicación muestra anuncios proporcionados por Google AdMob para seguir siendo gratuita. Estos anuncios están sujetos a las condiciones y la política de privacidad propias de Google. Más detalles en nuestra <a href="index.html">Política de privacidad</a>.</p>
+    </div>
+
+    <h2 class="reveal">Funciones premium</h2>
+    <div class="card reveal">
+      <p>Actualmente la aplicación no ofrece compras ni suscripciones: todas las funciones son accesibles de forma gratuita, con publicidad. Si en el futuro se ofrece una suscripción premium, sus condiciones específicas (precio, duración, renovación, cancelación) se indicarán antes de cualquier compra, y estas condiciones se actualizarán en consecuencia.</p>
+    </div>
+
+    <h2 class="reveal">Ausencia de garantía</h2>
+    <div class="card reveal">
+      <p>La aplicación se proporciona «tal cual», sin garantía de ningún tipo, expresa o implícita. Nos esforzamos por que funcione correctamente, pero no garantizamos que esté libre de errores o disponible sin interrupciones.</p>
+    </div>
+
+    <h2 class="reveal">Limitación de responsabilidad</h2>
+    <div class="card reveal">
+      <p>En la medida permitida por la ley, no podremos ser considerados responsables de los daños indirectos derivados del uso o de la imposibilidad de usar la aplicación.</p>
+    </div>
+
+    <h2 class="reveal">Modificaciones</h2>
+    <p class="reveal">Estas condiciones pueden actualizarse para reflejar cambios en la aplicación (por ejemplo, la incorporación de una suscripción premium). La fecha de «última actualización» en la parte superior de esta página siempre refleja la versión vigente.</p>
+
+    <h2 class="reveal">Ley aplicable</h2>
+    <div class="card reveal">
+      <p>Estas condiciones se rigen por la legislación francesa. En caso de conflicto, se buscará en primer lugar una solución amistosa.</p>
+    </div>
+
+    <div class="contact reveal">
+      <p>¿Tienes alguna pregunta sobre estas condiciones? Escríbenos a <a href="mailto:lablanchyseb@gmail.com">lablanchyseb@gmail.com</a>.</p>
+      <p class="cross-link"><a href="index.html">Consulta también nuestra Política de privacidad →</a></p>
+    </div>
+  </div>
+
+  <!-- DEUTSCH -->
+  <div class="lang-block" data-lang="de" hidden>
+    <header class="reveal">
+      <p class="eyebrow">Bonne nuit</p>
+      <h1>Nutzungsbedingungen</h1>
+      <p class="meta">Zuletzt aktualisiert: 10. September 2026</p>
+    </header>
+
+    <p class="reveal">Mit der Nutzung der App Bonne nuit, herausgegeben von Sébastien Lablanchy (unabhängiger Entwickler), erklärst du dich mit diesen Nutzungsbedingungen einverstanden. Wenn du nicht einverstanden bist, nutze die App bitte nicht.</p>
+
+    <h2 class="reveal">Beschreibung des Dienstes</h2>
+    <div class="card reveal">
+      <p>Bonne nuit ist eine App mit beruhigenden Klängen (Schlaflieder, Naturgeräusche), die Kindern beim Einschlafen helfen sollen, sowie einer Funktion zum Aufnehmen eigener Schlaflieder. Die App ist kostenlos und wird durch Werbung finanziert.</p>
+    </div>
+
+    <h2 class="reveal">Nutzung durch Kinder und elterliche Aufsicht</h2>
+    <div class="card reveal">
+      <p>Bonne nuit ist so konzipiert, dass sie von einem Elternteil oder einer verantwortlichen erwachsenen Person zugunsten eines Kindes eingerichtet und genutzt wird. Sie ist nicht dafür gedacht, dass Kinder sie allein nutzen, insbesondere nicht für Einstellungen, die Timer-Konfiguration oder Werbeoptionen.</p>
+    </div>
+
+    <h2 class="reveal">Kein Medizinprodukt</h2>
+    <div class="card reveal">
+      <p>Bonne nuit ist ein Komfort-Werkzeug, das beim Einschlafen helfen soll. Sie stellt weder ein Medizinprodukt noch eine medizinische Beratung dar und sollte bei Schlafstörungen nicht die Betreuung durch eine medizinische Fachperson ersetzen.</p>
+    </div>
+
+    <h2 class="reveal">Geistiges Eigentum</h2>
+    <div class="card reveal">
+      <p>Die Klänge, Texte, visuellen Elemente und der gesamte Inhalt des App-Katalogs sind Eigentum von Bonne nuit oder seiner Partner und durch das Recht des geistigen Eigentums geschützt. Du darfst sie im Rahmen der normalen Nutzung der App verwenden, jedoch nicht extrahieren, weiterverbreiten oder kommerziell verwerten.</p>
+      <p>Audioaufnahmen, die du mit der Funktion zum Aufnehmen von Schlafliedern erstellst, gehören dir: Sie bleiben auf deinem Gerät gespeichert und werden niemals von uns erhoben oder genutzt.</p>
+    </div>
+
+    <h2 class="reveal">Zulässige Nutzung</h2>
+    <div class="card reveal">
+      <p>Du verpflichtest dich, die App bestimmungsgemäß zu nutzen, ohne zu versuchen, ihre Sicherheitsmaßnahmen zu umgehen, sie zurückzuentwickeln oder ihre Inhalte zu anderen als persönlichen und familiären Zwecken zu extrahieren.</p>
+    </div>
+
+    <h2 class="reveal">Werbung</h2>
+    <div class="card reveal">
+      <p>Die App zeigt Werbung von Google AdMob an, um kostenlos zu bleiben. Diese Werbung unterliegt den eigenen Bedingungen und der Datenschutzerklärung von Google. Weitere Details in unserer <a href="index.html">Datenschutzerklärung</a>.</p>
+    </div>
+
+    <h2 class="reveal">Premium-Funktionen</h2>
+    <div class="card reveal">
+      <p>Die App bietet derzeit keine Käufe oder Abonnements an: Alle Funktionen sind kostenlos mit Werbung zugänglich. Sollte künftig ein Premium-Abonnement angeboten werden, werden dessen spezifische Bedingungen (Preis, Laufzeit, Verlängerung, Kündigung) vor jedem Kauf mitgeteilt, und diese Bedingungen werden entsprechend aktualisiert.</p>
+    </div>
+
+    <h2 class="reveal">Keine Gewährleistung</h2>
+    <div class="card reveal">
+      <p>Die App wird „wie besehen" ohne jegliche ausdrückliche oder stillschweigende Gewährleistung bereitgestellt. Wir bemühen uns um einen einwandfreien Betrieb, garantieren jedoch nicht, dass sie fehlerfrei oder unterbrechungsfrei verfügbar ist.</p>
+    </div>
+
+    <h2 class="reveal">Haftungsbeschränkung</h2>
+    <div class="card reveal">
+      <p>Im gesetzlich zulässigen Rahmen haften wir nicht für mittelbare Schäden, die aus der Nutzung oder der Unmöglichkeit der Nutzung der App entstehen.</p>
+    </div>
+
+    <h2 class="reveal">Änderungen</h2>
+    <p class="reveal">Diese Bedingungen können aktualisiert werden, um Änderungen an der App widerzuspiegeln (zum Beispiel die Einführung eines Premium-Abonnements). Das Datum „Zuletzt aktualisiert" oben auf dieser Seite spiegelt stets die aktuell gültige Version wider.</p>
+
+    <h2 class="reveal">Anwendbares Recht</h2>
+    <div class="card reveal">
+      <p>Diese Bedingungen unterliegen französischem Recht. Im Streitfall wird vorrangig eine gütliche Lösung angestrebt.</p>
+    </div>
+
+    <div class="contact reveal">
+      <p>Fragen zu diesen Bedingungen? Schreib uns an <a href="mailto:lablanchyseb@gmail.com">lablanchyseb@gmail.com</a>.</p>
+      <p class="cross-link"><a href="index.html">Siehe auch unsere Datenschutzerklärung →</a></p>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // Starfield
+  (function () {
+    var container = document.getElementById('stars');
+    var count = window.innerWidth < 600 ? 40 : 70;
+    for (var i = 0; i < count; i++) {
+      var s = document.createElement('div');
+      s.className = 'star';
+      s.style.left = Math.random() * 100 + 'vw';
+      s.style.top = Math.random() * 100 + 'vh';
+      var size = (Math.random() * 2 + 1.5).toFixed(1);
+      s.style.width = size + 'px';
+      s.style.height = size + 'px';
+      s.style.animationDuration = (2 + Math.random() * 4).toFixed(1) + 's';
+      s.style.animationDelay = (Math.random() * 4).toFixed(1) + 's';
+      container.appendChild(s);
+    }
+  })();
+
+  // Scroll reveal (works across language switches too: unhiding a block
+  // changes its elements' geometry, which re-triggers the observer)
+  (function () {
+    var items = document.querySelectorAll('.reveal');
+    if (!('IntersectionObserver' in window)) {
+      items.forEach(function (el) { el.classList.add('in-view'); });
+      return;
+    }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    items.forEach(function (el) { io.observe(el); });
+  })();
+
+  // Language switcher (shared preference with the privacy policy page via localStorage)
+  (function () {
+    var SUPPORTED = ['fr', 'en', 'es', 'de'];
+    var STORAGE_KEY = 'bn-privacy-lang';
+
+    function detectLang() {
+      try {
+        var saved = localStorage.getItem(STORAGE_KEY);
+        if (saved && SUPPORTED.indexOf(saved) !== -1) return saved;
+      } catch (e) {}
+      var nav = (navigator.language || 'fr').slice(0, 2).toLowerCase();
+      return SUPPORTED.indexOf(nav) !== -1 ? nav : 'fr';
+    }
+
+    function setLang(lang) {
+      document.querySelectorAll('.lang-block').forEach(function (block) {
+        block.hidden = block.getAttribute('data-lang') !== lang;
+      });
+      document.querySelectorAll('[data-lang-btn]').forEach(function (btn) {
+        btn.classList.toggle('active', btn.getAttribute('data-lang-btn') === lang);
+      });
+      document.documentElement.lang = lang;
+      try { localStorage.setItem(STORAGE_KEY, lang); } catch (e) {}
+    }
+
+    document.querySelectorAll('[data-lang-btn]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        setLang(btn.getAttribute('data-lang-btn'));
+      });
+    });
+
+    setLang(detectLang());
+  })();
+</script>
+</body>
+</html>
