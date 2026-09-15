@@ -100,6 +100,61 @@
     color: #2a1f0f;
   }
 
+  .home-btn {
+    position: fixed;
+    top: 16px;
+    left: 16px;
+    z-index: 10;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(28, 23, 64, 0.85);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 8px 14px;
+    color: var(--text-dim);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+    transition: color 0.2s ease, border-color 0.2s ease;
+  }
+  .home-btn:hover {
+    color: var(--gold);
+    border-color: var(--gold);
+  }
+
+  .site-footer {
+    margin-top: 64px;
+    text-align: center;
+    color: var(--text-dim);
+    font-size: 13px;
+    position: relative;
+    z-index: 1;
+  }
+  .site-footer .links {
+    display: flex;
+    gap: 18px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+  }
+  .site-footer .links a {
+    color: var(--text-dim);
+    text-decoration: none;
+    transition: color 0.25s ease;
+  }
+  .site-footer .links a:hover {
+    color: var(--gold);
+  }
+  .site-footer p {
+    margin: 0;
+    color: var(--text-dim);
+  }
+  .site-footer p a {
+    color: var(--text-dim);
+  }
+
   .wrap {
     max-width: 720px;
     margin: 0 auto;
@@ -199,6 +254,8 @@
 <div id="stars"></div>
 <div class="header-glow"></div>
 
+<a href="/" class="home-btn" aria-label="Retour à l'accueil">← Accueil</a>
+
 <div class="lang-switch" role="group" aria-label="Choisir la langue / Choose language">
   <button type="button" data-lang-btn="fr">FR</button>
   <button type="button" data-lang-btn="en">EN</button>
@@ -246,7 +303,7 @@
 
     <h2 class="reveal">Publicité</h2>
     <div class="card reveal">
-      <p>L'application affiche des publicités fournies par Google AdMob afin de rester gratuite. Ces publicités sont soumises aux conditions et à la politique de confidentialité propres à Google. Plus de détails dans notre <a href="index.html">Politique de confidentialité</a>.</p>
+      <p>L'application affiche des publicités fournies par Google AdMob afin de rester gratuite. Ces publicités sont soumises aux conditions et à la politique de confidentialité propres à Google. Plus de détails dans notre <a href="confidentialite.html">Politique de confidentialité</a>.</p>
     </div>
 
     <h2 class="reveal">Fonctionnalités premium</h2>
@@ -283,7 +340,7 @@
 
     <div class="contact reveal">
       <p>Une question sur ces conditions ? Écrivez-nous à <a href="mailto:lablanchyseb@gmail.com">lablanchyseb@gmail.com</a>.</p>
-      <p class="cross-link"><a href="index.html">Consultez aussi notre Politique de confidentialité →</a></p>
+      <p class="cross-link"><a href="confidentialite.html">Consultez aussi notre Politique de confidentialité →</a></p>
     </div>
   </div>
 
@@ -325,7 +382,7 @@
 
     <h2 class="reveal">Advertising</h2>
     <div class="card reveal">
-      <p>The app displays ads provided by Google AdMob to stay free. These ads are subject to Google's own terms and privacy policy. See our <a href="index.html">Privacy Policy</a> for details.</p>
+      <p>The app displays ads provided by Google AdMob to stay free. These ads are subject to Google's own terms and privacy policy. See our <a href="confidentialite.html">Privacy Policy</a> for details.</p>
     </div>
 
     <h2 class="reveal">Premium features</h2>
@@ -362,7 +419,7 @@
 
     <div class="contact reveal">
       <p>Have a question about these terms? Email us at <a href="mailto:lablanchyseb@gmail.com">lablanchyseb@gmail.com</a>.</p>
-      <p class="cross-link"><a href="index.html">See also our Privacy Policy →</a></p>
+      <p class="cross-link"><a href="confidentialite.html">See also our Privacy Policy →</a></p>
     </div>
   </div>
 
@@ -404,7 +461,7 @@
 
     <h2 class="reveal">Publicidad</h2>
     <div class="card reveal">
-      <p>La aplicación muestra anuncios proporcionados por Google AdMob para seguir siendo gratuita. Estos anuncios están sujetos a las condiciones y la política de privacidad propias de Google. Más detalles en nuestra <a href="index.html">Política de privacidad</a>.</p>
+      <p>La aplicación muestra anuncios proporcionados por Google AdMob para seguir siendo gratuita. Estos anuncios están sujetos a las condiciones y la política de privacidad propias de Google. Más detalles en nuestra <a href="confidentialite.html">Política de privacidad</a>.</p>
     </div>
 
     <h2 class="reveal">Funciones premium</h2>
@@ -441,7 +498,7 @@
 
     <div class="contact reveal">
       <p>¿Tienes alguna pregunta sobre estas condiciones? Escríbenos a <a href="mailto:lablanchyseb@gmail.com">lablanchyseb@gmail.com</a>.</p>
-      <p class="cross-link"><a href="index.html">Consulta también nuestra Política de privacidad →</a></p>
+      <p class="cross-link"><a href="confidentialite.html">Consulta también nuestra Política de privacidad →</a></p>
     </div>
   </div>
 
@@ -483,7 +540,7 @@
 
     <h2 class="reveal">Werbung</h2>
     <div class="card reveal">
-      <p>Die App zeigt Werbung von Google AdMob an, um kostenlos zu bleiben. Diese Werbung unterliegt den eigenen Bedingungen und der Datenschutzerklärung von Google. Weitere Details in unserer <a href="index.html">Datenschutzerklärung</a>.</p>
+      <p>Die App zeigt Werbung von Google AdMob an, um kostenlos zu bleiben. Diese Werbung unterliegt den eigenen Bedingungen und der Datenschutzerklärung von Google. Weitere Details in unserer <a href="confidentialite.html">Datenschutzerklärung</a>.</p>
     </div>
 
     <h2 class="reveal">Premium-Funktionen</h2>
@@ -520,9 +577,18 @@
 
     <div class="contact reveal">
       <p>Fragen zu diesen Bedingungen? Schreib uns an <a href="mailto:lablanchyseb@gmail.com">lablanchyseb@gmail.com</a>.</p>
-      <p class="cross-link"><a href="index.html">Siehe auch unsere Datenschutzerklärung →</a></p>
+      <p class="cross-link"><a href="confidentialite.html">Siehe auch unsere Datenschutzerklärung →</a></p>
     </div>
   </div>
+
+  <footer class="site-footer">
+    <div class="links">
+      <a href="/#faq">FAQ</a>
+      <a href="/confidentialite.html">Politique de confidentialité</a>
+      <a href="/mentions-legales.html">Mentions légales</a>
+    </div>
+    <p>Boîte à Berceuses · <a href="mailto:lablanchyseb@gmail.com">lablanchyseb@gmail.com</a></p>
+  </footer>
 
 </div>
 
